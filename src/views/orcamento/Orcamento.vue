@@ -70,9 +70,9 @@
             <div v-for="(personalizacao, index) in personalizacoes" :key="index">
               <div class="personalizacao-container">
                 <label>Nome na Camisa:</label>
-                <input type="text" v-model="personalizacao.nome">
+                <input type="text" class="form-control" v-model="personalizacao.nome">
                 <label>Número da Camisa:</label>
-                <input type="text" v-model="personalizacao.numeroCamisa">
+                <input type="text" class="form-control" v-model="personalizacao.numeroCamisa">
               </div>
             </div>
           </div>
@@ -273,6 +273,7 @@ button:hover {
   width: 100px;
   height: 30px;
   margin-right: 5px;
+  margin-top: 10px;
   align-items: center;
   text-align: center;
 }
