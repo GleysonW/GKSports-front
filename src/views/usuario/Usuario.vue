@@ -57,6 +57,7 @@ export default {
     data(){
         return{
             users: []
+
         }
     },
     mounted(){
@@ -68,10 +69,11 @@ export default {
     methods: {
         getUsers(){
 
-            axios.get('http://localhost:5500/api').then(res => {
-                this.users =res.data.users
-                console.log(this.users)
-            });
+            axios.get('http://localhost:5500/api')
+                .then(res => {
+                    this.users =res.data.users
+                    console.log(this.users)
+                });
         },
 
         deletarUsuario(usersId){
@@ -81,7 +83,7 @@ export default {
                 //console.log(usersId)
                 axios.delete(`http://localhost:5500/api/${usersId}`)
                     .then(res => {
-                        alert(res.data.message);
+                        alert('Usuário deletado com sucesso!');
                         this.getUsers();
                     })
                     .catch(function () {

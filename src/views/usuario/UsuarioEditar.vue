@@ -87,7 +87,7 @@ export default {
                 .then(res => {
 
                     console.log(res.data)
-                    alert(res.data.message);
+                    alert('Usuário editado com sucesso!');
 
                     this.errorList = '';
                 })
@@ -120,6 +120,7 @@ export default {
 
             var mythis = this;
             axios.post('http://localhost:5500/api/', this.model.users)
+
                 .then(res => {
 
                     console.log(res.data)

@@ -60,8 +60,9 @@ export default {
                 .then(res => {
 
                     console.log(res.data)
-                    alert(res.data.message);
+                    alert('Usuário registrado com sucesso!');
                     this.model.users = {
+
                         nome: '',
                         email: '',
                         celular: ''
