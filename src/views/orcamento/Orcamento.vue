@@ -18,14 +18,14 @@
         </ul>
         <div class="input-container" v-if="activeTab === 'servico'">
           <label for="nome-orcamento">Nome do Orçamento:</label>
-          <input type="text" v-model="nomeOrcamento" id="nome-orcamento">
+          <input type="text" class="form-control" v-model="nomeOrcamento" id="nome-orcamento">
         </div>
         <div class="tab-content">
           <div class="tab-pane fade" :class="{ 'show active': activeTab === 'servico' }" role="tabpanel">
             <form @submit.prevent="adicionarServico">
               <div class="input-container">
                 <label for="servico">Selecione o serviço:</label>
-                <select v-model="servicoSelecionado">
+                <select class="form-control" v-model="servicoSelecionado">
                   <option v-for="(preco, servico) in precos" :key="servico" :value="servico">
                     {{ servico }}
                   </option>
@@ -33,7 +33,7 @@
               </div>
               <div class="input-container">
                 <label for="tamanho">Tamanho:</label>
-                <select v-model="tamanhoSelecionado">
+                <select class="form-control"v-model="tamanhoSelecionado">
                   <option value="P">P</option>
                   <option value="M">M</option>
                   <option value="G">G</option>
@@ -41,7 +41,7 @@
               </div>
               <div class="input-container">
                 <label for="tecido">Escolha o tipo de tecido:</label>
-                <select v-model="tecidoSelecionado">
+                <select class="form-control" v-model="tecidoSelecionado">
                   <option v-for="tecido in tecidos" :key="tecido.texto" :value="tecido.valor">
                     {{ tecido.texto }}
                   </option>
@@ -49,10 +49,12 @@
               </div>
               <div class="input-container">
                 <label for="quantidade">Quantidade:</label>
-                <input type="number" v-model="quantidade" min="1">
+                <input type="number" class="form-control" v-model="quantidade" min="1">
               </div>
               <div class="input-container">
-                <button type="submit">Adicionar Serviço</button>
+                <button type="submit" class="btn btn-primary"
+                >Adicionar Serviço
+                </button>
                 <p v-if="mensagemSucesso" class="texto-successo">{{ mensagemSucesso }}</p>
                 <p v-if="mensagemErro" class="texto-erro">{{ mensagemErro }}</p>
               </div>
@@ -60,9 +62,9 @@
           </div>
           <div class="tab-pane fade" :class="{ 'show active': activeTab === 'personalizacao' }" role="tabpanel">
             <div class="personalizacao-container">
-              <button @click="adicionarCampoPersonalizacao" type="button" id="botao-personalizacao">+</button>
+              <button @click="adicionarCampoPersonalizacao" type="button" id="botao-personalizacao" class="btn btn-primary">+</button>
               <h5>Clique no "+" para adicionar um campo de personalização</h5>
-              <button @click="removerCampoPersonalizacao(index)" type="button" id="botao-personalizacao">-</button>
+              <button @click="removerCampoPersonalizacao(index)" type="button" id="botao-personalizacao" class="btn btn-primary">-</button>
               <h5>Clique no "-" para remover um campo de personalização</h5>
             </div>
             <div v-for="(personalizacao, index) in personalizacoes" :key="index">
@@ -82,7 +84,7 @@
               <ul>
                 <li v-for="(servico, index) in servicosSelecionados" :key="index">
                   {{ servico.texto }} - Tecido: {{ servico.tecido }} - Tamanho: {{ servico.tamanho }} - Quantidade: {{ servico.quantidade }} - {{ servico.personalizadas ? 'Personalizadas: Sim, Quantidade: ' + servico.quantidadeCamisasPersonalizadas : 'Personalizadas: Não' }} - Preço Serviço: R${{ (servico.valor * servico.quantidade).toFixed(2) }}
-                  <button @click="removerServico(index)" type="button">Remover</button>
+                  <button @click="removerServico(index)" type="button" class="btn btn-primary">Remover</button>
                 </li>
               </ul>
               <div v-if="personalizacoes.length > 0">
@@ -103,10 +105,10 @@
               </div>
               <div class="input-container">
                 <label for="desconto">Desconto:</label>
-                <input type="text" v-model="desconto">
+                <input type="text" class="form-control" v-model="desconto">
               </div>
               <div>
-                <button @click="gerarPDF">Gerar PDF</button>
+                <button class="btn btn-primary" @click="gerarPDF">Gerar PDF</button>
               </div>
             </div>
           </div>
