@@ -21,10 +21,6 @@
           <input type="text" v-model="model.users.senha" class="form-control"/>
         </div>
         <div class="mb-3">
-          <label for="role">Role</label>
-          <input type="text" v-model="model.users.role" class="form-control"/>
-        </div>
-        <div class="mb-3">
           <button type="button" @click="atualizarUsuario" class="btn btn-primary">Atualizar</button>
         </div>
       </div>
@@ -75,6 +71,7 @@ export default {
           this.errorList = {};
         })
         .catch(error => {
+          console.log(this.model.users);
           if (error.response && error.response.status === 422) {
             this.errorList = error.response.data.errors;
           } else if (error.response && error.response.status === 404) {

@@ -24,7 +24,7 @@ export default {
     },
     deletarUsuario(usersId) {
       if (confirm('Você tem certeza que quer deletar esse usuário?')) {
-        axios.delete("http://localhost:5500/api/${usersId}")
+        axios.delete(`http://localhost:8080/usuario/${usersId}`)
           .then(() => {
             alert('Usuário deletado com sucesso!');
             this.getUsers();
@@ -63,7 +63,6 @@ export default {
             <th>Nome</th>
             <th>Username</th>
             <th>Role</th>
-            <th>Enabled</th>
             <th>Ações</th>
           </tr>
           </thead>
@@ -72,7 +71,6 @@ export default {
             <td>{{ user.id }}</td>
             <td>{{ user.nome }}</td>
             <td>{{ user.role }}</td>
-            <td>{{ user.enabled }}</td>
             <td>
               <RouterLink :to="{ path: '/usuario/'+user.id+'/editar' }" class="btn btn-success">
                 Editar

@@ -15,15 +15,15 @@
 
                 <div class="mb-3">
                     <label for="">Nome</label>
-                    <input type="text" v-model="model.users.name" class="form-control"/>
+                    <input type="text" v-model="model.users.nome" class="form-control"/>
                 </div>
                 <div class="mb-3">
-                    <label for="">Email</label>
-                    <input type="text" v-model="model.users.email" class="form-control"/>
+                    <label for="">Senha</label>
+                    <input type="text" v-model="model.users.senha" class="form-control"/>
                 </div>
                 <div class="mb-3">
-                    <label for="">Celular</label>
-                    <input type="text" v-model="model.users.celular" class="form-control"/>
+                    <label for="">Cargo (LETRA MAIUSCULA)</label>
+                    <input type="text" v-model="model.users.role" class="form-control"/>
                 </div>
                 <div class="mb-3">
                     <button type="button" @click="salvarUsuario"class="btn btn-primary">Salvar</button>
@@ -45,8 +45,8 @@ export default {
             model: {
                 users: {
                     name: '',
-                    email: '',
-                    celular: ''
+                    senha: '',
+                    role: '',                   
                 }
             }
         }
@@ -56,7 +56,7 @@ export default {
         salvarUsuario(){
 
             var mythis = this;
-            axios.post('http://localhost:5500/api/', this.model.users)
+            axios.post('http://localhost:8080/usuario/', this.model.users)
                 .then(res => {
 
                     console.log(res.data)
@@ -64,8 +64,8 @@ export default {
                     this.model.users = {
 
                         nome: '',
-                        email: '',
-                        celular: ''
+                        senha: '',
+                        role: ''
                     }
                     this.errorList = '';
                 })
