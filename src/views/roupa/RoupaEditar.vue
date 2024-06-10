@@ -13,15 +13,15 @@
         </ul>
 
         <div class="mb-3">
-          <label for="nome">Nome</label>
-          <input type="text" v-model="model.users.nome" class="form-control"/>
+          <label for="nome">nome</label>
+          <input type="text" v-model="model.camisa.nome" class="form-control"/>
         </div>
         <div class="mb-3">
-          <label for="senha">Senha</label>
-          <input type="text" v-model="model.users.senha" class="form-control"/>
+          <label for="valor">valor</label>
+          <input type="text" v-model="model.camisa.valor" class="form-control"/>
         </div>
         <div class="mb-3">
-          <button type="button" @click="atualizarUsuario" class="btn btn-primary">Atualizar</button>
+          <button type="button" @click="atualizarCamisa" class="btn btn-primary">Atualizar</button>
         </div>
       </div>
     </div>
@@ -32,52 +32,43 @@
 import axios from 'axios';
 
 export default {
-  name: 'usersEditar',
+  name: 'camisaEditar',
   data() {
     return {
-      usersId: '',
+      camisaId: '',
       errorList: {},
       model: {
-        users: {
+        camisa: {
           nome: '',
-          senha: '',
-          role: '' // Adicionado campo 'role'
+          valor: '',
         }
       }
     };
   },
   mounted() {
-    this.usersId = this.$route.params.id;
-    this.getUsersData(this.usersId);
+    this.camisaId = this.$route.params.id;
+    this.getcamisaData(this.camisaId);
   },
   methods: {
-    getUsersData(usersId) {
-      axios.get(`http://localhost:8080/usuario/${usersId}`)
+    getcamisaData(camisaId) {
+      axios.get(`http://localhost:8080/camisa/${camisaId}`)
         .then(res => {
-
-          let user = res.data;
-    
-          this.model.users = {
-            nome: user.nome,
-            senha: user.senha,
-            role: user.role
-          };
-          
+          this.model.camisa = res.data;
         })
         .catch(error => {
           if (error.response && error.response.status === 404) {
             alert(error.response.data.message);
           } else {
-            console.error('Erro ao obter dados do usuário:', error);
+            console.error('Erro ao obter dados da camisa:', error);
           }
         });
     },
-    atualizarUsuario() {
-      axios.put(`http://localhost:8080/usuario/${this.usersId}`, this.model.users)
+    atualizarCamisa() {
+      axios.put(`http://localhost:8080/camisa/${this.camisaId}`, this.model.camisa)
         .then(() => {
-          alert('Usuário editado com sucesso!');
+          alert('Camisa editada com sucesso!');
           this.errorList = {};
-          this.$router.push({name: 'Usuários'});
+          this.$router.push({name: 'Roupa'});
         })
         .catch(error => {
           console.log();
@@ -90,6 +81,24 @@ export default {
           }
         });
     },
+    salvarCamisa() {
+      axios.post(`http://localhost:8080/Camisa/`, this.model.camisa)
+        .then(res => {
+          alert(res.data.message);
+          this.model.camisa = {
+            nome: '',
+            valor: '',
+          };
+          this.errorList = {};
+        })
+        .catch(error => {
+          if (error.response && error.response.status === 422) {
+            this.errorList = error.response.data.errors;
+          } else {
+            console.error('Erro ao salvar usuário:', error);
+          }
+        });
+    }
   }
 };
 </script>

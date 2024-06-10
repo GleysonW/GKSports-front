@@ -14,4 +14,16 @@ export default [
     to: '/usuario',
     icon: 'cil-user',
   },
+  {
+    component: 'CNavItem',
+    name: 'Roupa',
+    to: '/roupa',
+    icon: 'cil-user',
+  },
+  {
+    component: 'CNavItem',
+    name: 'Tecido',
+    to: '/tecido',
+    icon: 'cil-user',
+  },
 ]

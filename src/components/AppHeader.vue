@@ -34,6 +34,12 @@ onMounted(() => {
         <CNavItem>
           <CNavLink href="#usuario">Usuários</CNavLink>
         </CNavItem>
+        <CNavItem>
+          <CNavLink href="#roupa">Roupas</CNavLink>
+        </CNavItem>
+        <CNavItem>
+          <CNavLink href="#tecido">Tecido</CNavLink>
+        </CNavItem>
       </CHeaderNav>
       <CHeaderNav class="ms-auto">
         <CNavItem>

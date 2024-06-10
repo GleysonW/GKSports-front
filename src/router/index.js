@@ -33,6 +33,36 @@ const routes = [
         name: 'EditarUsuário',
         component: () => import('@/views/usuario/UsuarioEditar.vue')
       },
+      {
+        path: '/roupa',
+        name: 'Roupa',
+        component: () => import('@/views/roupa/Roupa.vue')
+      },
+      {
+        path: '/roupa/:id/editar',
+        name: 'EditarRoupa',
+        component: () => import('@/views/roupa/RoupaEditar.vue')
+      },
+      {
+        path: '/roupa/registrar',
+        name: 'RegistrarRoupa',
+        component: () => import('@/views/roupa/RoupaRegistrar.vue')
+      },
+      {
+        path: '/tecido',
+        name: 'Tecido',
+        component: () => import('@/views/tecido/Tecido.vue')
+      },
+      {
+        path: '/tecido/:id/editar',
+        name: 'EditarTecido',
+        component: () => import('@/views/tecido/TecidoEditar.vue')
+      },
+      {
+        path: '/tecido/registrar',
+        name: 'RegistrarTecido',
+        component: () => import('@/views/tecido/TecidoRegistrar.vue')
+      },
     ]
   },
 ]

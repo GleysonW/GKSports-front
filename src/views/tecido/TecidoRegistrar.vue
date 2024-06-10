@@ -3,7 +3,7 @@
     <div class="container mt-5">
         <div class="card">
             <div class="card-header">
-                <h4>Add Usuário</h4>
+                <h4>Add Tecido</h4>
             </div>
             <div class="card-body">
 
@@ -15,18 +15,14 @@
 
                 <div class="mb-3">
                     <label for="">Nome</label>
-                    <input type="text" v-model="model.users.nome" class="form-control"/>
+                    <input type="text" v-model="model.tecido.nome" class="form-control"/>
                 </div>
                 <div class="mb-3">
-                    <label for="">Senha</label>
-                    <input type="text" v-model="model.users.senha" class="form-control"/>
+                    <label for="">valor</label>
+                    <input type="text" v-model="model.tecido.valor" class="form-control"/>
                 </div>
                 <div class="mb-3">
-                    <label for="">Cargo (LETRA MAIUSCULA)</label>
-                    <input type="text" v-model="model.users.role" class="form-control"/>
-                </div>
-                <div class="mb-3">
-                    <button type="button" @click="salvarUsuario"class="btn btn-primary">Salvar</button>
+                    <button type="button" @click="salvarTecido"class="btn btn-primary">Salvar</button>
                 </div>
             </div>
         </div>
@@ -38,37 +34,35 @@
 import axios from 'axios'
 
 export default {
-    name: 'usersRegistrar',
+    name: 'tecidoRegistrar',
     data(){
         return {
             errorList: '',
             model: {
-                users: {
-                    name: '',
-                    senha: '',
-                    role: '',                   
+                tecido: {
+                    nome: '',
+                    valor: '',               
                 }
             }
         }
     },
     methods: {
 
-        salvarUsuario(){
+        salvarTecido(){
 
             var mythis = this;
-            axios.post('http://localhost:8080/usuario/', this.model.users)
+            axios.post('http://localhost:8080/tecido/', this.model.tecido)
                 .then(res => {
 
                     console.log(res.data)
                     alert('Usuário registrado com sucesso!');
-                    this.model.users = {
+                    this.model.tecido = {
 
                         nome: '',
-                        senha: '',
-                        role: ''
+                        valor: ''
                     }
                     this.errorList = '';
-                    this.$router.push({name: 'Usuários'});
+                    this.$router.push({name: 'Tecido'});
                 })
                 .catch(function () {
 
