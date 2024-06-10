@@ -54,7 +54,12 @@ export default {
     getUsersData(usersId) {
       axios.get(`http://localhost:8080/usuario/${usersId}`)
         .then(res => {
-          this.model.users = res.data;
+          let user = res.data;
+          this.model.users = {
+            nome: user.nome,
+            senha: user.senha,
+            role: user.role
+          };
         })
         .catch(error => {
           if (error.response && error.response.status === 404) {
@@ -69,6 +74,7 @@ export default {
         .then(() => {
           alert('Usuário editado com sucesso!');
           this.errorList = {};
+          this.$router.push({ name: 'Usuários' });
         })
         .catch(error => {
           console.log(this.model.users);
@@ -81,25 +87,6 @@ export default {
           }
         });
     },
-    salvarUsuario() {
-      axios.post(`http://localhost:8080/usuario/`, this.model.users)
-        .then(res => {
-          alert(res.data.message);
-          this.model.users = {
-            nome: '',
-            senha: '',
-            role: '' // Reinicializado campo 'role'
-          };
-          this.errorList = {};
-        })
-        .catch(error => {
-          if (error.response && error.response.status === 422) {
-            this.errorList = error.response.data.errors;
-          } else {
-            console.error('Erro ao salvar usuário:', error);
-          }
-        });
-    }
   }
 };
 </script>
