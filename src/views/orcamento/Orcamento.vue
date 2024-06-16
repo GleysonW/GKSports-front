@@ -250,7 +250,7 @@ button:hover {
   flex-direction: column;
   margin-top: 12px;
 }
-
+ 
 .personalizacao-container {
   flex-direction: row;
   display: flex;
