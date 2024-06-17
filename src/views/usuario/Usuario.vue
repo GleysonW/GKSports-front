@@ -61,7 +61,6 @@ export default {
           <tr>
             <th>ID</th>
             <th>Nome</th>
-            <th>Username</th>
             <th>Role</th>
             <th>Ações</th>
           </tr>

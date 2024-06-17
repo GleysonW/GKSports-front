@@ -22,8 +22,12 @@
                     <input type="text" v-model="model.users.senha" class="form-control"/>
                 </div>
                 <div class="mb-3">
-                    <label for="">Cargo (LETRA MAIUSCULA)</label>
-                    <input type="text" v-model="model.users.role" class="form-control"/>
+                    <label for="">Cargo</label>
+                    <select name="role" id="cargo" v-model="model.users.role" class="form-control">
+                        <option value="ADMIN">ADMIN</option>
+                        <option value="USER">USER</option>
+                    <input type="text"/>
+                </select>
                 </div>
                 <div class="mb-3">
                     <button type="button" @click="salvarUsuario"class="btn btn-primary">Salvar</button>

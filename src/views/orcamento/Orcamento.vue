@@ -17,8 +17,12 @@
           </li>
         </ul>
         <div class="input-container" v-if="activeTab === 'servico'">
-          <label for="nome-orcamento">Nome do Orçamento:</label>
-          <input type="text" class="form-control" v-model="nomeOrcamento" id="nome-orcamento">
+          <label for="nome-cliente">Nome do Cliente:</label>
+          <select class="form-control" v-model="nomeCliente" id="nome-cliente">
+            <option v-for="(user, index) in users" :key="index">
+                {{ user.nome }}
+            </option>
+          </select>
         </div>
         <div class="tab-content">
           <div class="tab-pane fade" :class="{ 'show active': activeTab === 'servico' }" role="tabpanel">
@@ -26,14 +30,14 @@
               <div class="input-container">
                 <label for="servico">Selecione o serviço:</label>
                 <select class="form-control" v-model="servicoSelecionado">
-                  <option v-for="(preco, servico) in precos" :key="servico" :value="servico">
-                    {{ servico }}
+                  <option v-for="(camisa, index) in camisa" :key="index" :value="camisa">
+                    {{ camisa.nome }}
                   </option>
                 </select>
               </div>
               <div class="input-container">
                 <label for="tamanho">Tamanho:</label>
-                <select class="form-control"v-model="tamanhoSelecionado">
+                <select class="form-control" v-model="tamanhoSelecionado">
                   <option value="P">P</option>
                   <option value="M">M</option>
                   <option value="G">G</option>
@@ -42,8 +46,8 @@
               <div class="input-container">
                 <label for="tecido">Escolha o tipo de tecido:</label>
                 <select class="form-control" v-model="tecidoSelecionado">
-                  <option v-for="tecido in tecidos" :key="tecido.texto" :value="tecido.valor">
-                    {{ tecido.texto }}
+                  <option v-for="(tecido, index) in tecido" :key="index" :value="tecido">
+                    {{ tecido.nome }}
                   </option>
                 </select>
               </div>
@@ -52,9 +56,7 @@
                 <input type="number" class="form-control" v-model="quantidade" min="1">
               </div>
               <div class="input-container">
-                <button type="submit" class="btn btn-primary"
-                >Adicionar Serviço
-                </button>
+                <button type="submit" class="btn btn-primary">Adicionar Serviço</button>
                 <p v-if="mensagemSucesso" class="texto-successo">{{ mensagemSucesso }}</p>
                 <p v-if="mensagemErro" class="texto-erro">{{ mensagemErro }}</p>
               </div>
@@ -78,12 +80,12 @@
           </div>
           <div class="tab-pane fade" id="resumo" :class="{ 'show active': activeTab === 'resumo' }" role="tabpanel">
             <div class="servicos-selecionados">
-              <h3>Nome do Orçamento:</h3>
-              <h5>{{ nomeOrcamento }}</h5>
+              <h3>Nome do Cliente:</h3>
+              <h5>{{ nomeCliente }}</h5>
               <h3>Serviços Selecionados:</h3>
               <ul>
                 <li v-for="(servico, index) in servicosSelecionados" :key="index">
-                  {{ servico.texto }} - Tecido: {{ servico.tecido }} - Tamanho: {{ servico.tamanho }} - Quantidade: {{ servico.quantidade }} - {{ servico.personalizadas ? 'Personalizadas: Sim, Quantidade: ' + servico.quantidadeCamisasPersonalizadas : 'Personalizadas: Não' }} - Preço Serviço: R${{ (servico.valor * servico.quantidade).toFixed(2) }}
+                  {{ servico.texto }} - Tecido: {{ servico.tecido }} - Tamanho: {{ servico.tamanho }} - Quantidade: {{ servico.quantidade }} - Preço Serviço: R${{ (servico.valor * servico.quantidade).toFixed(2) }}
                   <button @click="removerServico(index)" type="button" class="btn btn-primary">Remover</button>
                 </li>
               </ul>
@@ -121,57 +123,35 @@
 <script>
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import axios from 'axios'
+import jsPDF from 'jspdf'
+import 'jspdf-autotable'
 
 export default {
   name: "FormOrcamento",
-
   data() {
     return {
-      nomeOrcamento: '',
+      users: [],
+      tecido: [],
+      camisa: [],
+      nomeCliente: '',
       activeTab: 'servico',
-      precos: {
-        Camisa: {
-          normal: 60,
-          bom: 70,
-          otimo: 80
-        },
-        Camisa_Personalizada: {
-          normal: 70,
-          bom: 80,
-          otimo: 90
-        },
-        Short: {
-          normal: 50,
-          bom: 60,
-          otimo: 70
-        },
-        Abada: {
-          normal: 55,
-          bom: 65,
-          otimo: 75
-        },
-        Conjunto: {
-          normal: 100,
-          bom: 120,
-          otimo: 140
-        }
-      },
-      tecidos: [
-        { texto: 'Normal', valor: 'normal' },
-        { texto: 'Bom', valor: 'bom' },
-        { texto: 'Ótimo', valor: 'otimo' }
-      ],
-      servicoSelecionado: 'Camisa',
+      servicoSelecionado: null,
       quantidade: 1,
       servicosSelecionados: [],
       total: 0,
-      tecidoSelecionado: 'normal',
+      tecidoSelecionado: null,
       tamanhoSelecionado: 'P',
       desconto: 0,
       personalizacoes: [],
       mensagemSucesso: '',
       mensagemErro: ''
     };
+  },
+  mounted() {
+    this.getUsers();
+    this.getTecido();
+    this.getcamisa();
   },
   computed: {
     subtotalFormatado() {
@@ -182,15 +162,33 @@ export default {
     }
   },
   methods: {
+    getUsers() {
+      axios.get('http://localhost:8080/usuario/')
+        .then(res => {
+          this.users = res.data;
+        });
+    },
+    getTecido() {
+      axios.get('http://localhost:8080/tecido/')
+        .then(res => {
+          this.tecido = res.data;
+        });
+    },
+    getcamisa() {
+      axios.get('http://localhost:8080/camisa/')
+        .then(res => {
+          this.camisa = res.data;
+        });
+    },
     adicionarServico() {
-      const preco = this.precos[this.servicoSelecionado][this.tecidoSelecionado];
+      const preco = this.servicoSelecionado.valor + this.tecidoSelecionado.valor;
       const precoTotal = preco * this.quantidade;
       this.servicosSelecionados.push({
-        texto: this.servicoSelecionado,
-        tecido: this.tecidoSelecionado,
+        texto: this.servicoSelecionado.nome,
+        tecido: this.tecidoSelecionado.nome,
         tamanho: this.tamanhoSelecionado,
         quantidade: this.quantidade,
-        valor: preco 
+        valor: preco
       });
       this.total += precoTotal;
       this.mensagemSucesso = 'Serviço adicionado com sucesso.';
@@ -210,6 +208,46 @@ export default {
       this.total -= servicoRemovido.valor * servicoRemovido.quantidade;
       this.servicosSelecionados.splice(index, 1);
     },
+    gerarPDF() {
+      const doc = new jsPDF();
+
+      doc.text("Resumo de Orçamento", 15, 10);
+      doc.text(`Nome do Cliente: ${this.nomeCliente}`, 15, 20);
+
+      const servicosData = this.servicosSelecionados.map(servico => [
+        servico.texto,
+        servico.tecido,
+        servico.tamanho,
+        servico.quantidade,
+        `R$${(servico.valor * servico.quantidade).toFixed(2)}`
+      ]);
+
+      doc.autoTable({
+        head: [['Serviço', 'Tecido', 'Tamanho', 'Quantidade', 'Preço']],
+        body: servicosData,
+        startY: 30
+      });
+
+      const personalizacoesData = this.personalizacoes.map(personalizacao => [
+        personalizacao.nome,
+        personalizacao.numeroCamisa
+      ]);
+
+      if (personalizacoesData.length > 0) {
+        doc.autoTable({
+          head: [['Nome na Camisa', 'Número da Camisa']],
+          body: personalizacoesData,
+          startY: doc.autoTable.previous.finalY + 10
+        });
+      }
+
+      doc.text(`Subtotal (Sem Desconto): ${this.subtotalFormatado}`, 15, doc.autoTable.previous.finalY + 20);
+      doc.text(`Desconto: R$${this.desconto}`, 15, doc.autoTable.previous.finalY + 30);
+      doc.text(`Total (Com Desconto): ${this.totalFormatado}`, 15, doc.autoTable.previous.finalY + 40);
+
+      const nomeArquivo = `orcamento_${this.nomeCliente.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
+      doc.save(nomeArquivo);
+    }
   }
 };
 </script>
@@ -250,7 +288,7 @@ button:hover {
   flex-direction: column;
   margin-top: 12px;
 }
- 
+
 .personalizacao-container {
   flex-direction: row;
   display: flex;
